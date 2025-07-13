@@ -1,4 +1,3 @@
-# 💤 LazyVim
+# Abhi's Neovim installation 
 
-A starter template for [LazyVim](https://github.com/LazyVim/LazyVim).
-Refer to the [documentation](https://lazyvim.github.io/installation) to get started.
+This is my neovim installation, which is minimally tweaked from LazyNvim and the default configs in Omarchy.
