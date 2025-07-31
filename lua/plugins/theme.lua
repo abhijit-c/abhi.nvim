@@ -1,1 +1,9 @@
-/home/lotus/.config/omarchy/current/theme/neovim.lua
+return {
+  { "tahayvr/matteblack.nvim", lazy = false, priority = 1000 },
+  {
+    "LazyVim/LazyVim",
+    opts = {
+      colorscheme = "matteblack",
+    },
+  },
+}
