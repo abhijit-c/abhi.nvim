@@ -2,7 +2,7 @@
 -- ==                           EDITOR SETTINGS                            == --
 -- ========================================================================== --
 
--- Learn more about Neovim lua api
+-- Lua API links
 -- https://neovim.io/doc/user/lua-guide.html
 -- https://vonheikemen.github.io/devlog/tools/build-your-first-lua-config-for-neovim/
 
@@ -79,31 +79,13 @@ lazy.plugins = {
   {'nvim-treesitter/nvim-treesitter', build = ':TSUpdate', branch = 'main'},
 }
 
--- The following plugins no longer support Neovim v0.10 or lower.
--- They need to be pinned to a version that is compatible.
-if vim.fn.has('nvim-0.11') == 0 then
-  vim.list_extend(lazy.plugins, {
-    {'neovim/nvim-lspconfig', tag = 'v1.8.0', pin = true},
-    {
-      'nvim-treesitter/nvim-treesitter',
-      tag = 'v0.10.0',
-      pin = true,
-      main = 'nvim-treesitter.configs',
-      opts = {
-        highlight = {enable = true},
-        ensure_installed = {'lua', 'vim', 'vimdoc', 'c', 'query'},
-      },
-    },
-  })
-end
-
 lazy.setup(lazy.plugins)
 
 -- ========================================================================== --
 -- ==                         PLUGIN CONFIGURATION                         == --
 -- ========================================================================== --
 
-vim.cmd.colorscheme('tokyonight')
+vim.cmd.colorscheme('tokyonight-night')
 
 -- Newer versions of nvim-treesitter no longer provide
 -- fancy modules that enable features for us.
@@ -253,3 +235,40 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
+
+-- ========================================================================== --
+-- ==                            LSP CONFIGURATION                         == --
+-- ========================================================================== --
+
+vim.lsp.enable('lua_ls')
+
+vim.lsp.enable('basedpyright')
+vim.lsp.enable('ruff')
+
+vim.lsp.config('texlab', {
+	settings = {
+		texlab = {
+			bibtexFormatter = "texlab",
+			build = {
+				args = { "-pdf", "-interaction=nonstopmode", "-synctex=1", "%f" },
+				executable = "latexmk",
+				forwardSearchAfter = false,
+				onSave = true
+			},
+			chktex = {
+				onEdit = false,
+				onOpenAndSave = false
+			},
+			diagnosticsDelay = 300,
+			formatterLineLength = 80,
+			forwardSearch = {
+				args = {}
+			},
+			latexFormatter = "latexindent",
+			latexindent = {
+				modifyLineBreaks = false
+			}
+		}
+	}
+})
+vim.lsp.enable('texlab')
