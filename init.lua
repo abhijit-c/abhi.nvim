@@ -80,6 +80,16 @@ lazy.plugins = {
   { 'neovim/nvim-lspconfig' },
   { 'nvim-mini/mini.nvim',             branch = 'main' },
   { 'nvim-treesitter/nvim-treesitter', build = ':TSUpdate', branch = 'main' },
+  {
+    'Julian/lean.nvim',
+    event = { 'BufReadPre *.lean', 'BufNewFile *.lean' },
+    dependencies = {
+      'nvim-lua/plenary.nvim',
+    },
+    opts = {
+      mappings = true,
+    },
+  },
 }
 
 lazy.setup(lazy.plugins)
@@ -246,7 +256,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 vim.lsp.enable('lua_ls')
 
 -- Python
-vim.lsp.enable('basedpyright')
+--vim.lsp.enable('basedpyright')
+vim.lsp.enable('ty')
 vim.lsp.enable('ruff')
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup('lsp_attach_disable_ruff_hover', { clear = true }),
