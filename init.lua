@@ -22,7 +22,7 @@ vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {
   desc = "Code action",
 })
 
-vim.cmd.colorscheme('retrobox')
+vim.cmd.colorscheme('elflord')
 
 vim.pack.add({
   'https://github.com/neovim/nvim-lspconfig',
