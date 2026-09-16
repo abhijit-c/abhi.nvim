@@ -18,6 +18,10 @@ vim.keymap.set({'n', 'x'}, 'gp', '"+p', {desc = 'Paste clipboard text'})
 vim.keymap.set('n', '<leader>w', '<cmd>write<cr>', {desc = 'Save file'})
 vim.keymap.set('n', '<leader>q', '<cmd>quitall<cr>', {desc = 'Exit vim'})
 
+vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, {
+  desc = "Code action",
+})
+
 vim.cmd.colorscheme('retrobox')
 
 vim.pack.add({
@@ -69,3 +73,7 @@ vim.api.nvim_create_autocmd("LspAttach", {
   desc = "LSP: Disable hover capability from Ruff",
 })
 vim.lsp.enable({'ty', 'ruff'})
+
+-- Lean configuration. Hopefully just working ?!
+vim.pack.add { "https://github.com/Julian/lean.nvim" }
+vim.g.lean_config = { mappings = true }
