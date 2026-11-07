@@ -9,6 +9,8 @@ vim.o.signcolumn = 'yes'
 
 -- Space as the leader key
 vim.g.mapleader = vim.keycode('<Space>')
+-- Localleader is used by VimTeX mappings, e.g. <Space>lll to compile
+vim.g.maplocalleader = vim.keycode('<Space>l')
 
 -- Basic clipboard interaction
 vim.keymap.set({'n', 'x'}, 'gy', '"+y', {desc = 'Copy to clipboard'})
@@ -39,6 +41,8 @@ require('mini.pick').setup({})
 vim.keymap.set('n', '<leader><space>', '<cmd>Pick buffers<cr>', {desc = 'Search open files'})
 vim.keymap.set('n', '<leader>ff', '<cmd>Pick files<cr>', {desc = 'Search all files'})
 vim.keymap.set('n', '<leader>fh', '<cmd>Pick help<cr>', {desc = 'Search help tags'})
+vim.keymap.set('n', '<leader>cf', vim.lsp.buf.format, { desc = 'Format current buffer' })
+
 
 -- Open files at the same place where we left off
 vim.api.nvim_create_autocmd("BufReadPost", {
@@ -58,9 +62,37 @@ vim.api.nvim_create_autocmd("BufReadPost", {
   end,
 })
 
+-- vimtex
+vim.pack.add({ 'https://github.com/lervag/vimtex' })
+-- Compiler is latexmk, which is the default, so nothing to set for it.
+if vim.fn.has('mac') == 1 then
+  -- VimTeX has built-in Skim support, including forward and inverse search
+  -- Inverse search (Cmd+Shift+click in Skim) needs a one-time Skim setting:
+  --   Preferences -> Sync -> Preset: Custom
+  --   Command:   nvim  (use the full path, e.g. /opt/homebrew/bin/nvim, if Skim can't find it)
+  --   Arguments: --headless -c "VimtexInverseSearch %line '%file'"
+  vim.g.vimtex_view_method = 'skim'
+  -- Keep focus in Neovim after forward search
+  vim.g.vimtex_view_skim_activate = 0
+  -- Update the PDF in Skim after each successful compile
+  vim.g.vimtex_view_skim_sync = 1
+else
+  vim.g.vimtex_view_general_viewer = 'okular'
+  vim.g.vimtex_view_general_options = '--unique file:@pdf\\#src:@line@tex'
+end
+
+-- There is no LSP for TeX, so let mini.completion fall back to VimTeX's omnifunc
+vim.api.nvim_create_autocmd('FileType', {
+  pattern = 'tex',
+  callback = function()
+    vim.b.minicompletion_config = { fallback_action = '<C-x><C-o>' }
+  end,
+  desc = 'Use VimTeX omni completion in TeX files',
+})
+
 -- List of compatible language servers is here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
-vim.lsp.enable({'panache', 'texlab'})
+vim.lsp.enable({'panache'})
 
 vim.api.nvim_create_autocmd("LspAttach", {
   group = vim.api.nvim_create_augroup("lsp_attach_disable_ruff_hover", { clear = true }),
@@ -77,3 +109,8 @@ vim.lsp.enable({'ty', 'ruff'})
 -- Lean configuration. Hopefully just working ?!
 vim.pack.add { "https://github.com/Julian/lean.nvim" }
 vim.g.lean_config = { mappings = true }
+
+
+if vim.g.neovide then
+	vim.o.guifont = "Noto Sans Mono:h20" -- text below applies for VimScript
+end
